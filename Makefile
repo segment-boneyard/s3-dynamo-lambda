@@ -1,6 +1,6 @@
 
 
-dist: build
+provision: build
 	terraform apply ./terraform
 
 build:

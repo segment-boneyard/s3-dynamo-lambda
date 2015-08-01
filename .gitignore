@@ -1,2 +1,5 @@
 .envrc
 build.zip
+*.tfstate
+*.tfstate.backup
+*.tfvars

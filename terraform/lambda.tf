@@ -1,6 +1,7 @@
 
 resource "aws_lambda_function" "segment-s3-dynamo" {
-	filename = "lambda.zip"
+	filename = "../build.zip"
 	function_name = "segment-s3-dynamo"
-	handler = "exports.handler"
+	handler = "segment.handler"
+	role = "${aws_iam_role.segment-s3-dynamo-lambda.arn}"
 }

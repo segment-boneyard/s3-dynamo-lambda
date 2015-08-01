@@ -1,6 +1,6 @@
 
-resource "aws_iam_role" "test_role" {
-    name = "test_role"
+resource "aws_iam_role" "segment-s3-dynamo-lambda" {
+    name = "segment-s3-dynamo-lambda"
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -8,7 +8,7 @@ resource "aws_iam_role" "test_role" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "Service": "ec2.amazonaws.com"
+        "Service": "lambda.amazonaws.com"
       },
       "Effect": "Allow",
       "Sid": ""
