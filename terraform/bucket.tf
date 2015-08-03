@@ -14,6 +14,15 @@ resource "aws_s3_bucket" "segment-s3-dynamo-bucket" {
 			},
 			"Action": "s3:PutObject",
 			"Resource": "arn:aws:s3:::${var.bucket_name}/segment-logs/*"
+		},
+		{
+			"Sid": "Stmt1425281765688",
+			"Effect": "Allow",
+			"Principal": {
+				"AWS": "${aws_iam_role.segment-s3-dynamo-lambda.arn}"
+			},
+			"Action": ["s3:Get*", "s3:List*"],
+			"Resource": "arn:aws:s3:::${var.bucket_name}/segment-logs/*"
 		}
 	]
 }
