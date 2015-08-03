@@ -1,4 +1,5 @@
 .envrc
+node_modules
 build.zip
 *.tfstate
 *.tfstate.backup

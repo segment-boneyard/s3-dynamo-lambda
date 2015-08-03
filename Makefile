@@ -4,7 +4,8 @@ provision: build
 	terraform apply ./terraform
 
 build:
-	cd lambda && zip -r ../build.zip .
+	npm install
+	zip -r build.zip segment.js node_modules
 
 
 

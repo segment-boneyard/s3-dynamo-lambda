@@ -1,0 +1,33 @@
+{
+  "name": "s3-dynamo-lambda",
+  "version": "1.0.0",
+  "description": "Example application demonstrating the use of Terraform and AWS Lambda with the Segment AWS S3 integration.",
+  "main": "segment.js",
+  "dependencies": {
+    "aws-sdk": "^2.1.42",
+    "date-math": "0.0.1",
+    "split": "^1.0.0",
+    "through2": "^2.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/segmentio/s3-dynamo-lambda.git"
+  },
+  "keywords": [
+    "Lambda",
+    "Segment",
+    "S3",
+    "AWS",
+    "DynamoDB"
+  ],
+  "author": "Calvin French-Owen, Chris Sperandio",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/segmentio/s3-dynamo-lambda/issues"
+  },
+  "homepage": "https://github.com/segmentio/s3-dynamo-lambda#readme"
+}
