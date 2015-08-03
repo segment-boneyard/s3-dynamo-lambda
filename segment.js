@@ -5,6 +5,7 @@
 
 var datemath = require('date-math');
 var through2 = require('through2');
+var pipe = require('multipipe');
 var Batch = require('batch');
 var AWS = require('aws-sdk');
 var split = require('split');
@@ -41,14 +42,14 @@ exports.handler = function(s3Event, context) {
    * - close stream and wait on batch to finish
    */
 
-  s3.getObject({ Bucket: bucket, Key: key })
-    .createReadStream()
-    .pipe(zlib.createGunzip())
-    .pipe(stringify())
-    .pipe(split(parse))
-    .on('data', handleEvent)
-    .on('error', handleError)
-    .on('end', close);
+  pipe(
+    s3.getObject({ Bucket: bucket, Key: key }).createReadStream(),
+    zlib.createGunzip(),
+    stringify(),
+    split(parse)
+  ).on('data', handleEvent)
+   .on('error', handleError)
+   .on('end', close);
 
   /**
    * The segment event handler
@@ -103,7 +104,9 @@ exports.handler = function(s3Event, context) {
 
   // handle stream errors (just bail, for now :p)
   function handleError(err) {
-    if (err) return context.done(err);
+    console.log('Error:', err);
+    console.log('Exiting...');
+    context.done(err);
   }
 
   // handle the end of the stream
