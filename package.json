@@ -5,6 +5,7 @@
   "main": "segment.js",
   "dependencies": {
     "aws-sdk": "^2.1.42",
+    "batch": "^0.5.2",
     "date-math": "0.0.1",
     "split": "^1.0.0",
     "through2": "^2.0.0"
