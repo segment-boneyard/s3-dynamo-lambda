@@ -5,9 +5,12 @@ With Segment's S3 integration, you can host an entire analytics pipeline without
 
 ## Getting Started
 
-First you'll want to download and install `[terraform][]`. We'll use it to automatically provision and setup our infrastructure using the files in the [./terraform][] directory.
+First you'll want to download and install [terraform][]. We'll use it to automatically provision and setup our infrastructure using the files in the [./terraform][] directory.
+
+If you haven't already, you'll want to create an AWS account and download 
 
 [terraform]: https://terraform.io/downloads.html
+[./terraform]: https://github.com/segmentio/s3-dynamo-lambda/tree/master/terraform
 
 ## Setting up your project
 
@@ -17,9 +20,9 @@ Before connecting to your AWS account, you'll want to make sure that you've expo
     export AWS_SECRET_ACCESS_KEY="xxxxxxxx"
     export AWS_REGION="us-east-1"
 
-Terraform will also ask you for specific variables as well, which you'll want to save in a `terraform.tfvars` file. You'll need to supply the name of your bucket, your aws account id and the region where you want to add your infrastructure.
+Terraform will also ask you for specific variables as well, which you'll want to save in a `terraform.tfvars` file. You'll need to supply the name of your bucket, your aws account id and the region where you want to add your infrastructure. It should looks something like this
 
-    bucket_name = "calvin-test-bucket"
+    bucket_name = "your-bucket-name"
     aws_account_id = "386218347676"
     aws_region = "us-east-1"
 
@@ -33,7 +36,9 @@ Finally, you'll want to add your bucket to the S3 integration for your Segment p
 
 ## The lambda function
 
-We've stored our example lambda function in the `segment.js` file. It reads from our events, splits the line separated json, and adds the counts of different events into Dynamo.
+We've stored our example lambda function in the [segment.js][./segment.js] file. It reads from our events, splits the line separated json, and adds the counts of different events into Dynamo.
+
+If you want to update the lambda function, simply change the code around and then run `make update`. The meat of the event interactions happens in our `handleEvent` function.
 
 ## Testing
 
@@ -45,9 +50,9 @@ If you're testing the lambda function, it's easiest to use the CLI.
       --region us-east-1 \
       --log-type Tail \
       --payload file://file.json \
-      outputfile.txt
+      output.txt
 
-Where your file looks something like:
+Where your payload file looks something like:
 
 ```json
 {
