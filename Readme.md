@@ -1,35 +1,69 @@
 
 # S3-Dynamo-Lambda connector
 
-More easily than ever, you can host an entire analytics pipeline without having to worry about individual instances or who will run your analytics code. Here's how.
+With Segment's S3 integration, you can host an entire analytics pipeline without having to worry about individual instances or hosting your own infrastructure. Here's how to set up an integration which automatically tallies events in Dynamo every hour without requiring any hosting on your side.
 
-##
+## Getting Started
 
-    $ make build
+First you'll want to download and install `[terraform][]`. We'll use it to automatically provision and setup our infrastructure using the files in the [./terraform][] directory.
 
-    $ aws lambda create-function \
-      --region us-west-2 \
-      --function-name S3-Dynamo \
-      --zip-file file://file-path/build.zip \
-      --role role-arn \
-      --handler Worker.handler \
-      --runtime nodejs \
-      --profile adminuser \
-      --timeout 10 \
-      --memory-size 1024
+[terraform]: https://terraform.io/downloads.html
 
-    $ aws lambda add-permission \
-      --function-name S3-Dynamo \
-      --region us-west-2 \
-      --statement-id  \
-      --action "lambda:InvokeFunction" \
-      --principal s3.amazonaws.com \
-      --source-arn arn:aws:s3:::sourcebucket \
-      --source-account bucket-owner-account-id \
-      --profile adminuser
+## Setting up your project
 
-## TODO
+Before connecting to your AWS account, you'll want to make sure that you've exported the following variables with the credentials for your account.
 
- - cloudformation/tf
- - script iam users
- - code
+    export AWS_ACCESS_KEY_ID="xxxxxxxxx"
+    export AWS_SECRET_ACCESS_KEY="xxxxxxxx"
+    export AWS_REGION="us-east-1"
+
+Terraform will also ask you for specific variables as well, which you'll want to save in a `terraform.tfvars` file. You'll need to supply the name of your bucket, your aws account id and the region where you want to add your infrastructure.
+
+    bucket_name = "calvin-test-bucket"
+    aws_account_id = "386218347676"
+    aws_region = "us-east-1"
+
+From there, just run `make`. This will spin up your s3 bucket, lambda function, and dynamo instance, all with the appropriate permissions.  
+
+    $ make
+
+The last thing you'll need to do is enable an event notification for your bucket, which haven't been setup for terraform yet. You can enable it in the AWS console.
+
+Finally, you'll want to add your bucket to the S3 integration for your Segment project. And, that's it. You're done! A totally hosted analytics pipeline.
+
+## The lambda function
+
+We've stored our example lambda function in the `segment.js` file. It reads from our events, splits the line separated json, and adds the counts of different events into Dynamo.
+
+## Testing
+
+If you're testing the lambda function, it's easiest to use the CLI. 
+
+    aws lambda invoke \                    
+      --invocation-type RequestResponse \
+      --function-name segment-s3-dynamo \
+      --region us-east-1 \
+      --log-type Tail \
+      --payload file://file.json \
+      outputfile.txt
+
+Where your file looks something like:
+
+```json
+{
+  "Records": [
+    {
+      "s3": {
+        "object": {
+          "key": "{FILE_PATH}"
+        },
+        "bucket": {
+          "arn": "arn:aws:s3:::{YOUR_BUCKET}",
+          "name": "{YOUR_BUCKET}"
+        }
+      }
+    }
+  ]
+}
+```
+

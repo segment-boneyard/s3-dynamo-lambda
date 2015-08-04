@@ -4,5 +4,5 @@ variable "aws_region" {
 }
 variable "bucket_name" {}
 variable "lambda_build" {
-	default = "../build.zip"
+	default = "build.zip"
 }

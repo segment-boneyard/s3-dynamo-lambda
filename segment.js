@@ -29,7 +29,7 @@ exports.handler = function(s3Event, context) {
   var key = s3Event.Records[0].s3.object.key;
   var batch = new Batch();
 
-  console.log('Recieved S3 event, downloading file...');
+  console.log('Received S3 event, downloading file...');
 
    /**
    * Request S3 file stream, then:
@@ -54,20 +54,22 @@ exports.handler = function(s3Event, context) {
   /**
    * The segment event handler
    *
-   * Takes a segment event and insert/incrs a record in Dynamo like so:
+   * Takes a segment event and insert/incrs a record in Dynamo in the following 
+   * format:
    *
    * [<event_name>.<hour>] = count
    *
    * @param {Object} event
-   * @param {Object} context
    */
 
   function handleEvent(event) {
     if (event.type !== 'track') return;
-    var Hour = String(datemath.hour.floor(new Date(event.timestamp)).getTime());
+
+    var floored = datemath.hour.floor(new Date(event.timestamp);
+    var Hour = floored.getTime().toString();
     var Name = event.event;
 
-    console.log('Event:', Name);
+    console.log('Event: ', Name);
 
     batch.push(function(done) {
       dynamo.updateItem({
@@ -78,7 +80,7 @@ exports.handler = function(s3Event, context) {
         TableName: 'Events',
         AttributeUpdates: {
           Count: {
-            Value: { N: '1'},
+            Value: { N: '1' },
             Action: 'ADD'
           }
         }
