@@ -30,9 +30,13 @@ From there, just run `make`. This will spin up your s3 bucket, lambda function, 
 
     $ make
 
-The last thing you'll need to do is enable an event notification for your bucket, which haven't been setup for terraform yet. You can enable it in the AWS console.
+The last thing you'll need to do is enable an event notification for your bucket, which haven't been setup for terraform yet. You can enable it in the AWS console. There are instructions on how to do that [here](http://docs.aws.amazon.com/AmazonS3/latest/UG/SettingBucketNotifications.html#SettingBucketNotifications-enable-events).
 
-Finally, you'll want to add your bucket to the S3 integration for your Segment project. And, that's it. You're done! A totally hosted analytics pipeline.
+Finally, you'll want to [add your bucket to the S3 integration for your Segment project](https://segment.com/docs/integrations/amazon-s3/). 
+
+![](https://cloudup.com/cSdeplmW4Vs+)
+
+And, that's it. You're done! A totally hosted analytics pipeline.
 
 ## The lambda function
 
