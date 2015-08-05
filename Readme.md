@@ -40,7 +40,7 @@ And, that's it. You're done! A totally hosted analytics pipeline.
 
 ## The lambda function
 
-We've stored our example lambda function in the [segment.js][./segment.js] file. It reads from our events, splits the line separated json, and adds the counts of different events into Dynamo.
+We've stored our example lambda function in the [segment.js][https://github.com/segmentio/s3-dynamo-lambda/blob/master/segment.js] file. It reads from our S3 event logs, splits the line separated json, and adds the counts of different events into Dynamo.
 
 If you want to update the lambda function, simply change the code around and then run `make update`. The meat of the event interactions happens in our `handleEvent` function.
 
