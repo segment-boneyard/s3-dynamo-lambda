@@ -21,9 +21,13 @@ Before connecting to your AWS account, you'll want to make sure that you've expo
     export AWS_SECRET_ACCESS_KEY="xxxxxxxx"
     export AWS_REGION="us-east-1"
 
-Terraform will also ask you for specific variables as well, which you'll want to save in a `terraform.tfvars` file in your root directory. You'll need to supply the name of the bucket you'd like to add, your aws account id (a 12-digit number found under your account), and the region where you want to add your infrastructure. It should look something like this
+Next clone this repo, then you'll be ready to set up your project specific settings
 
-    bucket_name = "your-bucket-name"
+    git clone git@github.com:segmentio/s3-dynamo-lambda.git
+
+Terraform will also ask you for specific variables as well, which you'll want to save in a `terraform.tfvars` file in your project directory. You'll need to supply the name of the bucket you'd like to add, your aws account id (a 12-digit number found under your account), and the region where you want to add your infrastructure. It should look something like this
+
+    bucket_name = "your-desired-bucket-name"
     aws_account_id = "386218347676"
     aws_region = "us-east-1"
 
@@ -41,7 +45,7 @@ And, that's it. You're done! A totally hosted analytics pipeline. Query away my 
 
 ## The Lambda function
 
-We've stored our example lambda function in the [segment.js][https://github.com/segmentio/s3-dynamo-lambda/blob/master/segment.js] file. It reads from our S3 event logs, splits the line separated json, and adds the counts of different events into Dynamo.
+We've stored our example lambda function in the [segment.js](https://github.com/segmentio/s3-dynamo-lambda/blob/master/segment.js) file. It reads from our S3 event logs, splits the line separated json, and adds the counts of different events into Dynamo.
 
 If you want to update the lambda function, simply change the code around and then run `make update`. The meat of the event interactions happens in our `handleEvent` function.
 

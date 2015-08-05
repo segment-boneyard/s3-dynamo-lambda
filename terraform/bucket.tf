@@ -1,7 +1,7 @@
 
 resource "aws_s3_bucket" "segment-s3-dynamo-bucket" {
 	bucket = "${var.bucket_name}"
-	depends_on = ["aws_iam_role.segment-s3-dynamo-lambda"]
+	depends_on = ["aws_iam_role.segment-s3-dynamo-lambda", "aws_dynamodb_table.segment-s3-dynamo"]
 	policy = <<EOF
 {
 	"Version": "2008-10-17",
