@@ -41,7 +41,7 @@ Finally, you'll want to [add your bucket to the S3 integration for your Segment 
 
 ![](https://cloudup.com/cSdeplmW4Vs+)
 
-And, that's it. You're done! A totally hosted analytics pipeline. Query away my friend!
+And, that's it. You're done! A totally hosted analytics pipeline, updated every hour, on the hour. Query away my friend!
 
 ## The Lambda function
 

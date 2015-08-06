@@ -1,7 +1,10 @@
 
 
 provision: build
-	terraform apply ./terraform
+	terraform apply -target="aws_lambda_function.segment-s3-dynamo" \
+		-target="aws_dynamodb_table.segment-s3-dynamo" \
+		-target="aws_iam_role.segment-s3-dynamo-lambda" ./terraform
+	terraform apply ./terraform 
 
 build: clean
 	npm install
