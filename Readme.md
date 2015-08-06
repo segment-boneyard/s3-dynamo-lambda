@@ -7,7 +7,9 @@ With Segment's S3 integration, you can host an entire analytics pipeline without
 
 First you'll want to download and install [terraform][]. We'll use it to automatically provision and setup our infrastructure using the files in the [./terraform][] directory.
 
-If you haven't already, you'll want to create an AWS account and download your API Keys for making requests. You'll typically want to add them to your `.bashrc` or use a tool like [`direnv`][direnv] to add them to your environment variables
+If you haven't already, you'll want to create an AWS account and download your API Keys for making requests. You'll typically want to add them to your `.bashrc` or use a tool like [`direnv`][direnv] to add them to your environment variables.
+
+You won't have to create **any** AWS infrastructure ahead of time. Our terraform scripts will take care of all of it for you.
 
 [terraform]: https://terraform.io/downloads.html
 [./terraform]: https://github.com/segmentio/s3-dynamo-lambda/tree/master/terraform
@@ -35,7 +37,7 @@ From there, just run `make`. This will spin up your S3 bucket, Lambda function, 
 
     $ make
 
-The last thing you'll need to do is enable an event notification for your bucket, which haven't been setup for terraform yet. You can enable it in the AWS console, following the instructions found [here](http://docs.aws.amazon.com/AmazonS3/latest/UG/SettingBucketNotifications.html#SettingBucketNotifications-enable-events).
+You'll also **need to enable an event notification for your bucket** (which hasn't been added to terraform yet). You can enable it in the AWS console, [following the instructions in the AWS docs](http://docs.aws.amazon.com/AmazonS3/latest/UG/SettingBucketNotifications.html#SettingBucketNotifications-enable-events).
 
 Finally, you'll want to [add your bucket to the S3 integration for your Segment project](https://segment.com/docs/integrations/amazon-s3/). 
 
