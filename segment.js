@@ -6,7 +6,7 @@
 var datemath = require('date-math');
 var through2 = require('through2');
 var pipe = require('multipipe');
-var Batch = require('batch');
+var WaitGroup = require('waitgroup');
 var AWS = require('aws-sdk');
 var split = require('split');
 var zlib = require('zlib');
@@ -27,21 +27,24 @@ var s3 = new AWS.S3();
 exports.handler = function(s3Event, context) {
   var bucket = s3Event.Records[0].s3.bucket.name;
   var key = s3Event.Records[0].s3.object.key;
-  var batch = new Batch();
+  var wg = new WaitGroup;
 
   console.log('Received S3 event, downloading file...');
 
    /**
-   * Request S3 file stream, then:
+   * Event Extraction Pipeline
    *
+   * - incr wg
+   * - open stream
    * - unzip stream
    * - decode Buffer chunks to String
    * - buffer strings to newlines
    * - emit parsed events
-   * - push each event into batch for flush to dynamo
-   * - close stream and wait on batch to finish
+   * - on each event, incr wg -> flush to dynamo -> decr wg
+   * - decr wg on stream close
    */
 
+  wg.add();
   pipe(
     s3.getObject({ Bucket: bucket, Key: key }).createReadStream(),
     zlib.createGunzip(),
@@ -49,12 +52,19 @@ exports.handler = function(s3Event, context) {
     split(parse)
   ).on('data', handleEvent)
    .on('error', handleError)
-   .on('end', close);
+   .on('end', function(){
+      wg.done();
+   });
+
+   wg.wait(function() {
+    console.log('Finished Flush!');
+    context.done();
+   });
 
   /**
    * The segment event handler
    *
-   * Takes a segment event and insert/incrs a record in Dynamo in the following 
+   * Takes a segment event and insert/incrs a record in Dynamo in the following
    * format:
    *
    * [<event_name>.<hour>] = count
@@ -65,30 +75,29 @@ exports.handler = function(s3Event, context) {
   function handleEvent(event) {
     if (event.type !== 'track') return;
 
-    var floored = datemath.hour.floor(new Date(event.timestamp);
+    var floored = datemath.hour.floor(new Date(event.timestamp));
     var Hour = floored.getTime().toString();
     var Name = event.event;
 
     console.log('Event: ', Name);
 
-    batch.push(function(done) {
-      dynamo.updateItem({
-        Key: {
-          Name: { S: Name },
-          Timestamp: { N: Hour }
-        },
-        TableName: 'Events',
-        AttributeUpdates: {
-          Count: {
-            Value: { N: '1' },
-            Action: 'ADD'
-          }
+    wg.add();
+    dynamo.updateItem({
+      Key: {
+        Name: { S: Name },
+        Timestamp: { N: Hour }
+      },
+      TableName: 'Events',
+      AttributeUpdates: {
+        Count: {
+          Value: { N: '1' },
+          Action: 'ADD'
         }
-      }, function(err) {
-        if (err) return done(err);
-        console.log('Flushed:', Name);
-        done();
-      });
+      }
+    }, function(err) {
+      if (err) console.log('Error Flushing', Name, ':', err);
+      else console.log('Flushed:', Name);
+      wg.done();
     });
   }
 
@@ -109,15 +118,5 @@ exports.handler = function(s3Event, context) {
     console.log('Error:', err);
     console.log('Exiting...');
     context.done(err);
-  }
-
-  // handle the end of the stream
-  // wait for batch to finish then terminate the lambda session
-  function close() {
-    batch.end(function(err) {
-      if (err) return context.done(err);
-      console.log('Finished Flush!')
-      context.done();
-    });
   }
 }
