@@ -41,7 +41,9 @@ Finally, you'll want to add your bucket to the S3 integration for your Segment p
 
 ![](https://cloudup.com/cSdeplmW4Vs+)
 
-And, that's it. You're done! A totally hosted analytics pipeline, updated every hour, on the hour. Your DynamoDB table of event counts can be found here: [https://console.aws.amazon.com/dynamodb/home?region=us-east-1#explore:name=Events](https://console.aws.amazon.com/dynamodb/home?region=us-east-1#explore:name=Events) When the next hour strikes, query away my friend!
+And, that's it. You're done! A totally hosted analytics pipeline, updated every hour, on the hour. Your DynamoDB table of event counts can be found here: [https://console.aws.amazon.com/dynamodb/home?region=us-east-1#explore:name=Events](https://console.aws.amazon.com/dynamodb/home?region=us-east-1#explore:name=Events)
+
+When the next hour strikes, query away my friend!
 
 ## Background: The Lambda function
 
