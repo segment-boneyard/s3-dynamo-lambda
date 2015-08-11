@@ -35,7 +35,7 @@ From there, just run `make`. This will spin up your S3 bucket, Lambda function, 
 
     $ make
 
-You'll also **need to enable an event notification for your bucket** (which hasn't been added to terraform yet). You can enable it in the AWS console, [following the instructions in the AWS docs](http://docs.aws.amazon.com/AmazonS3/latest/UG/SettingBucketNotifications.html#SettingBucketNotifications-enable-events).
+You'll also **need to enable an event notification for your bucket** (which hasn't been added to terraform yet). You can enable it in the AWS S3 Console, [following the instructions in the AWS docs](http://docs.aws.amazon.com/AmazonS3/latest/UG/SettingBucketNotifications.html#SettingBucketNotifications-enable-events). You'll want to trigger an event for all ObjectCreated events, and route it to the Lambda function that terraform has created.
 
 Finally, you'll want to add your bucket to the S3 integration for your Segment project: 
 
