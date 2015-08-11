@@ -5,11 +5,9 @@ With Segment's S3 integration, you can host an entire analytics pipeline without
 
 ## Getting Started
 
-First you'll want to download and install [terraform][]. We'll use it to automatically provision and setup our infrastructure using the files in the [./terraform][] directory.
+First you'll want to download and install [terraform][]. We'll use it to automatically provision and setup our infrastructure using the files in this repo's [./terraform][] directory.
 
-If you haven't already, you'll want to create an AWS account and download your API Keys for making requests. You'll typically want to add them to your `.bashrc` or use a tool like [`direnv`][direnv] to add them to your environment variables.
-
-You won't have to create **any** AWS infrastructure ahead of time. Our terraform scripts will take care of all of it for you.
+If you haven't already, you'll want to create an AWS Account. For the rest of this setup process won't have to create **any** AWS infrastructure manually. Our terraform scripts will take care of all of it for you.
 
 [terraform]: https://terraform.io/downloads.html
 [./terraform]: https://github.com/segmentio/s3-dynamo-lambda/tree/master/terraform
@@ -17,17 +15,17 @@ You won't have to create **any** AWS infrastructure ahead of time. Our terraform
 
 ## Setting up your project
 
-Before connecting to your AWS account, you'll want to make sure that you've exported the following variables with the credentials for your account.
+Before running the Terraform script, you'll want to download your Access Keys from the AWS Security Credentials dashboard. You'll typically want to add them to your `.bashrc`, or use a tool like [`direnv`][direnv] to add them to your environment variables:
 
     export AWS_ACCESS_KEY_ID="xxxxxxxxx"
     export AWS_SECRET_ACCESS_KEY="xxxxxxxx"
     export AWS_REGION="us-east-1"
 
-Next clone this repo, then you'll be ready to set up your project specific settings
+Next, clone this repo:
 
     git clone git@github.com:segmentio/s3-dynamo-lambda.git
 
-Terraform will also ask you for specific variables as well, which you'll want to save in a `terraform.tfvars` file in your project directory. You'll need to supply the name of the bucket you'd like to add, your aws account id (a 12-digit number found under your account), and the region where you want to add your infrastructure. It should look something like this
+Terraform also needs to know a few specific variables, which you'll want to save in a `terraform.tfvars` file in the top-level directory of the repo you just cloned. You'll need to supply the name of the bucket you'd like to add, your AWS Account ID (a 12-digit number found under in your AWS Security Crednetials dashboard), and the region where you want to add your infrastructure (Segment's S3 worker is only us-east-1 for now, so stick with us-east-1). It should look something like this:
 
     bucket_name = "your-desired-bucket-name"
     aws_account_id = "386218347676"
@@ -39,13 +37,13 @@ From there, just run `make`. This will spin up your S3 bucket, Lambda function, 
 
 You'll also **need to enable an event notification for your bucket** (which hasn't been added to terraform yet). You can enable it in the AWS console, [following the instructions in the AWS docs](http://docs.aws.amazon.com/AmazonS3/latest/UG/SettingBucketNotifications.html#SettingBucketNotifications-enable-events).
 
-Finally, you'll want to [add your bucket to the S3 integration for your Segment project](https://segment.com/docs/integrations/amazon-s3/). 
+Finally, you'll want to add your bucket to the S3 integration for your Segment project: 
 
 ![](https://cloudup.com/cSdeplmW4Vs+)
 
-And, that's it. You're done! A totally hosted analytics pipeline, updated every hour, on the hour. Query away my friend!
+And, that's it. You're done! A totally hosted analytics pipeline, updated every hour, on the hour. Your DynamoDB table of event counts can be found here: [https://console.aws.amazon.com/dynamodb/home?region=us-east-1#explore:name=Events](https://console.aws.amazon.com/dynamodb/home?region=us-east-1#explore:name=Events) When the next hour strikes, query away my friend!
 
-## The Lambda function
+## Background: The Lambda function
 
 We've stored our example lambda function in the [segment.js](https://github.com/segmentio/s3-dynamo-lambda/blob/master/segment.js) file. It reads from our S3 event logs, splits the line separated json, and adds the counts of different events into Dynamo.
 
