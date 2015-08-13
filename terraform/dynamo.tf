@@ -2,6 +2,10 @@
 /**
  * The Segment Dynamo table which will keep track of 
  * event counts over time.
+ * 
+ * Keys will be tuples in the form:
+ *   
+ *   <Name, Timestamp, Count>
  */
 
 resource "aws_dynamodb_table" "segment-s3-dynamo" {

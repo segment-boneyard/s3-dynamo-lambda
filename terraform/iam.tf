@@ -28,7 +28,7 @@ resource "aws_iam_role_policy" "segment-s3-dynamo-lambda" {
         {
             "Action": "dynamodb:*",
             "Effect": "Allow",
-            "Resource": "arn:aws:dynamodb:${var.aws_region}:${var.aws_account_id}:table/${aws_dynamodb_table.segment-s3-dynamo.id}",
+            "Resource": "${aws_dynamodb_table.segment-s3-dynamo.arn}",
             "Sid": ""
         }
     ]
