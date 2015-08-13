@@ -8,7 +8,7 @@ provision: build
 
 build: clean
 	npm install
-	zip -r build.zip segment.js node_modules
+	zip -r build.zip index.js node_modules
 
 clean:
 	rm -f build.zip
