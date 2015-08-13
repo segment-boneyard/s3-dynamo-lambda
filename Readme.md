@@ -33,7 +33,7 @@ From there, just run `make`. This will spin up your S3 bucket, Lambda function, 
 
     $ make
 
-You'll also **need to enable an event notification for your bucket** (which hasn't been added to terraform yet). You can enable it in the AWS S3 Console, [following the instructions in the AWS docs](http://docs.aws.amazon.com/AmazonS3/latest/UG/SettingBucketNotifications.html#SettingBucketNotifications-enable-events). You'll want to trigger an event for all ObjectCreated events, and route it to the Lambda function that terraform has created.
+You'll also **need to enable an event notification for your bucket** (which hasn't been added to terraform yet). You can enable it in the AWS S3 Console, [following the instructions in the AWS docs](http://docs.aws.amazon.com/AmazonS3/latest/UG/SettingBucketNotifications.html#SettingBucketNotifications-enable-events). You'll want to trigger an event for *all `ObjectCreated`* events, and route it to the Lambda function that terraform has created.
 
 Finally, you'll want to add your bucket to the S3 integration for your Segment project: 
 
@@ -45,7 +45,7 @@ When the next hour strikes, query away my friend!
 
 ## Background: The Lambda function
 
-We've stored our example lambda function in the [segment.js](https://github.com/segmentio/s3-dynamo-lambda/blob/master/segment.js) file. It reads from our S3 event logs, splits the line separated json, and adds the counts of different events into Dynamo.
+We've stored our example lambda function in the [index.js](https://github.com/segmentio/s3-dynamo-lambda/blob/master/index.js) file. It reads from our S3 event logs, splits the line separated json, and adds the counts of different events into Dynamo.
 
 If you want to update the lambda function, simply change the code around and then run `make update`. The meat of the event interactions happens in our `handleEvent` function.
 
