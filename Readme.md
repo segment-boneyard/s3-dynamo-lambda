@@ -28,8 +28,6 @@ Next, clone this repo:
 Terraform also needs to know a few specific variables, which you'll want to save in a `terraform.tfvars` file in the top-level directory of the repo you just cloned. You'll need to supply the name of the bucket you'd like to add, your AWS Account ID (a 12-digit number found under in your AWS Security Crednetials dashboard), and the region where you want to add your infrastructure (Segment's S3 worker is only us-east-1 for now, so stick with us-east-1). It should look something like this:
 
     bucket_name = "your-desired-bucket-name"
-    aws_account_id = "386218347676"
-    aws_region = "us-east-1"
 
 From there, just run `make`. This will spin up your S3 bucket, Lambda function, and Dynamo instance, all with the appropriate permissions.  
 
