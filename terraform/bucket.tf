@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "segment-s3-dynamo-bucket" {
 			"Principal": {
 				"AWS": "arn:aws:iam::107630771604:user/s3-copy"
 			},
-			"Action": ["s3:PutObject", "s3:CopyObject"],
+			"Action": "s3:*",
 			"Resource": "arn:aws:s3:::${var.bucket_name}/segment-logs/*"
 		},
 		{
