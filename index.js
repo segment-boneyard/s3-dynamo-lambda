@@ -73,27 +73,24 @@ exports.handler = function(s3Event, context) {
    */
 
   function handleEvent(event) {
-    if (event.type !== 'track') return;
 
     var floored = datemath.hour.floor(new Date(event.timestamp));
     var Hour = floored.getTime().toString();
     var Name = event.event;
+    var AnonymousId = event.anonymousId;
+    var EventType = event.type;
 
     console.log('Event: ', Name);
 
     wg.add();
-    dynamo.updateItem({
-      Key: {
+    dynamo.putItem({
+      Item: {
         Name: { S: Name },
-        Timestamp: { N: Hour }
+        Timestamp: { N: Hour },
+        AnonymousId: { S: AnonymousId },
+        EventType: { S: EventType }
       },
-      TableName: 'Events',
-      AttributeUpdates: {
-        Count: {
-          Value: { N: '1' },
-          Action: 'ADD'
-        }
-      }
+      TableName: 'Events'
     }, function(err) {
       if (err) console.log('Error Flushing', Name, ':', err);
       else console.log('Flushed:', Name);

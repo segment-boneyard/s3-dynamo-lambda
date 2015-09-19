@@ -1,0 +1,15 @@
+{
+  "Records": [
+    {
+      "s3": {
+        "object": {
+          "key": "segment-logs/4R3ZaJRfi9/1442275200000/1442346494303.1aaa703a946e.1.10.5.0228ae40-91b4-429e-a849-4b38d5c1b455.gz"
+        },
+        "bucket": {
+          "arn": "arn:aws:s3:::events.paribus.co",
+          "name": "events.paribus.co"
+        }
+      }
+    }
+  ]
+}
