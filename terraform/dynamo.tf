@@ -5,17 +5,17 @@
  * 
  * Keys will be tuples in the form:
  *   
- *   <Name, Timestamp, Count>
+ *   <UserId, Timestamp>
  */
 
 resource "aws_dynamodb_table" "segment-s3-dynamo" {
     name = "Events"
     read_capacity = 20
     write_capacity = 20
-    hash_key = "Name"
+    hash_key = "UserId"
     range_key = "Timestamp"
     attribute {
-      name = "Name"
+      name = "UserId"
       type = "S"
     }
     attribute {
