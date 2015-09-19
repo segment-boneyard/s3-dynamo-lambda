@@ -74,21 +74,22 @@ exports.handler = function(s3Event, context) {
 
   function handleEvent(event) {
 
-    var floored = datemath.hour.floor(new Date(event.timestamp));
-    var Hour = floored.getTime().toString();
+    var floored = datemath.second.floor(new Date(event.timestamp));
+    var Second = floored.getTime().toString();
     var Name = event.event;
     var AnonymousId = event.anonymousId;
-    var EventType = event.type;
+    var Type = event.type;
+    var UserId = event.userId;
 
     console.log('Event: ', Name);
 
     wg.add();
     dynamo.putItem({
       Item: {
+        Timestamp: { N: Second },
+        UserId: { S: UserId || AnonymousId },
         Name: { S: Name },
-        Timestamp: { N: Hour },
-        AnonymousId: { S: AnonymousId },
-        EventType: { S: EventType }
+        Type: { S: Type }
       },
       TableName: 'Events'
     }, function(err) {
